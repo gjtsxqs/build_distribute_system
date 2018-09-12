@@ -4,4 +4,6 @@
 * [服务消费者](fu-wu-xiao-fei-zhe.md)
   * [feign简述](fu-wu-xiao-fei-zhe/feign.md)
 * [服务注册与发现](chapter1.md)
+* [Spring基础](springji-chu-pian-zhang.md)
+  * [aware接口](springji-chu-pian-zhang/awarejie-kou.md)
 

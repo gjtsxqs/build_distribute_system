@@ -28,11 +28,9 @@ Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更�
 
 使用 Feign 涉及到了两个注解，一个是@EnableFeignClients，用来开启 Feign，另一个是@FeignClient，用来标记要用 Feign 来拦截的请求接口。
 
-@FeignClient 要配合@RequestMapping、@RequestParam等注解使用，生成完整的http路径和参数
+@FeignClient 要配合@RequestMapping、@RequestParam等注解使用，生成完整的http路径和参数，详见hi\_kuaibao使用实例
 
+### **五、核心对象**
 
-
-
-
-
+FeignClient，FeignClientFactoryBean，FeignClientSpecification，FeignContext，RequestTemplate，Targeter
 

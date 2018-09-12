@@ -20,6 +20,16 @@ Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更�
 
 * 最后Client被封装到LoadBalanceClient类，这个类结合类Ribbon做到了负载均衡。
 
+
+
+### 请求是怎么转到 Feign 的？ {#h3_2}
+
+分为两部分，第一是为接口定义的每个接口都生成一个实现方法，结果就是 SynchronousMethodHandler 对象。第二是为该服务接口生成了动态代理。动态代理的实现是 ReflectiveFeign.FeignInvocationHanlder，代理被调用的时候，会根据当前调用的方法，转到对应的 SynchronousMethodHandler。
+
+
+
+
+
 ### **三、传递全局参数**
 
 通过requestInterceptor将全局参数通过apply\(RequestTemplate\) 方法传递到http请求的请求头里面。
@@ -32,5 +42,5 @@ Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更�
 
 ### **五、核心对象**
 
-FeignClient，FeignClientFactoryBean，FeignClientSpecification，FeignContext，RequestTemplate，Targeter
+FeignClient，FeignClientFactoryBean，FeignClientSpecification，FeignContext，RequestTemplate，Targeter，RequestInterceptor，FeignAutoConfiguration，SynchronousMethodHandler，FeignInvocationHanlder
 

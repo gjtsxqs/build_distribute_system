@@ -22,7 +22,21 @@ Netflix开源了Hystrix组件，实现了断路器模式，SpringCloud对这一�
 
 Feign是自带断路器的，在D版本的Spring Cloud之后，它没有默认打开。需要在配置文件中配置打开它，在配置文件加以下代码：
 
-     feign.hystrix.enabled=true![](/assets/import16.png)
+```
+ feign.hystrix.enabled=true!
+```
+
+基于service-feign工程进行改造，只需要在FeignClient的SchedualServiceHi接口的注解中加上fallback的指定类就行了：
+
+![](/assets/import21.png)
+
+SchedualServiceHiHystric需要实现SchedualServiceHi 接口，并注入到Ioc容器中，代码如下：
+
+![](/assets/import22.png)
+
+
+
+
 
 
 

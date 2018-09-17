@@ -14,4 +14,6 @@
   * [apollo](fen-bu-shi-pei-zhi-guan-li/apollo.md)
 * [断路器](duan-lu-qi.md)
   * [Hystrix](duan-lu-qi/hystrix.md)
+* [网关路由](wang-guan-lu-you.md)
+  * [zuul](wang-guan-lu-you/zuul.md)
 

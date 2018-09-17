@@ -7,6 +7,7 @@ Zuul的主要功能是路由转发和过滤器。路由功能是微服务的一�
 * 身份认证
 
 * 审查与监控
+
 * 压力测试
 * 金丝雀测试
 * 动态路由
@@ -100,6 +101,12 @@ routes:
         #路由路径
         url:http://localhost:9001/#指定URL地址
 ```
+
+忽略指定服务，多个服务逗号分隔，这样一来zuul就会忽略service1和service2，只会代理其它的
+
+zuul:
+
+ignored-services: battcn-hello-service1,battcn-hello-service2
 
 ### Zuul的高可用
 

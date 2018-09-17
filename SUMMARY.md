@@ -16,4 +16,5 @@
   * [Hystrix](duan-lu-qi/hystrix.md)
 * [网关路由](wang-guan-lu-you.md)
   * [zuul](wang-guan-lu-you/zuul.md)
+* 服务链路追踪
 

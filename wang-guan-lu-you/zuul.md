@@ -9,6 +9,7 @@ Zuul的主要功能是路由转发和过滤器。路由功能是微服务的一�
 * 审查与监控
 
 * 压力测试
+
 * 金丝雀测试
 * 动态路由
 * 服务迁移
@@ -106,7 +107,9 @@ routes:
 
 zuul:
 
-ignored-services: battcn-hello-service1,battcn-hello-service2
+  ignored-services: battcn-hello-service1,battcn-hello-service2
+
+通配符：![](/assets/import32.png)
 
 ### Zuul的高可用
 

@@ -45,9 +45,10 @@ Spring Cloud Sleuth采用的是Google的开源项目Dapper的专业术语。
 
 ### zipkin改进 {#zipkin改进}
 
-在这里对zipkin进行改进，主要包含两方面  
-- 通过消息中间件收集sleuth数据  
-- 持久化sleuth数据
+在这里对zipkin进行改进，主要包含两方面
+
+* 通过消息中间件收集sleuth数据  
+* 持久化sleuth数据
 
 **1、通过消息中间件收集sleuth数据**
 
@@ -55,7 +56,7 @@ Spring Cloud Sleuth采用的是Google的开源项目Dapper的专业术语。
 
 **改造服务端**
 
-- 修改zipkin server（trace项目）配置
+* 修改zipkin server（trace项目）配置
 
 ![](/assets/import46.png)
 
@@ -64,24 +65,24 @@ Spring Cloud Sleuth采用的是Google的开源项目Dapper的专业术语。
 ```
   rabbitmq:
     host: localhost
-    
+
 port
 : 
 5673
 
     username: guest
     password: guest
-
 ```
 
-这是sleuth数据来源  
-- 启动类`@EnableZipkinServer`改为`@EnableZipkinStreamServe`  
-以上服务端改造完毕，下面改造客户端（以`helloworld-feign项目为例`）
+这是sleuth数据来源
+
+* 启动类`@EnableZipkinServer`改为`@EnableZipkinStreamServe`  
+  以上服务端改造完毕，下面改造客户端（以`helloworld-feign项目为例`）
 
 **改造客户端**  
 以`helloworldfeign`项目为例
 
-- 修改依赖
+* 修改依赖
 
 ![](/assets/import58.png)
 
@@ -92,12 +93,9 @@ spring:
 
   rabbitmq:
     host: localhost
-    port: 
-5673
-
+    port: 5673
     username: guest
     password: guest
-
 ```
 
 并删除下面指向zipkin server的配置
@@ -105,15 +103,8 @@ spring:
 ```
 spring:
   zipkin:
-    
-base
--url: http:
-//127.0.0.1:9411
+    base-url: http://127.0.0.1:9411
 ```
-
-
-
-
 
 
 

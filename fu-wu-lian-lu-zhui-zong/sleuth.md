@@ -110,8 +110,9 @@ spring:
 
 在以上的过程中，只要重启zipkin server,发现之前的数据丢失。这是因为zipkin server获取的数据是放在内存的，我们可以获取的服务追踪数据放入到ElasticSearch
 
-**2、持久化sleuth数据**  
-- 修改依赖
+**2、持久化sleuth数据**
+
+* 修改依赖
 
 ![](/assets/import61.png)
 
@@ -127,8 +128,25 @@ zipkin:
       index: zipkin
       index-shards: 5
       index-replicas: 1
-
 ```
 
 再次启动track项目后，可以将数据持久化到elasticsearch。
+
+
+
+## sleuth与ELK集成
+
+我们已经引入了Sleuth的基础模块完成一次任务链的跟踪，但是由于日志文件都离散的存储在各个微服务结点上，日常运维时仅仅通过查看日志文件来分析定位问题还是一件繁琐的问题。所以我们需要一些工具来收集、存储、分析和展示日志信息，例如
+
+ELK（ElasticSearch、Logstash、kibana）组件。
+
+Spring Cloud Sleuth与ELK整合时实际上只要与Logstash对接既可，所以我们要为Logstash准备好Json格式的日志信息。SpringBoot默认使用logback来记录日志，而Logstash自身也有对logback日志工具的支持工具，所以可以直接通过在logback配置中增加Logstash的Appender来非常方便的将日志转化为Json的格式存储和输出了。
+
+
+
+
+
+
+
+
 

@@ -106,5 +106,29 @@ spring:
     base-url: http://127.0.0.1:9411
 ```
 
+这样就完成了客户端的配置，依次启动`track`和`helloworldfeign`项目，通过`http://localhost:8030/message`调用其他服务后，在zipkin server 成功获取了`helloworldfeign`的sleuth数据。
 
+在以上的过程中，只要重启zipkin server,发现之前的数据丢失。这是因为zipkin server获取的数据是放在内存的，我们可以获取的服务追踪数据放入到ElasticSearch
+
+**2、持久化sleuth数据**  
+- 修改依赖
+
+![](/assets/import61.png)
+
+配置文件增加
+
+```
+zipkin:
+  storage:
+    type: elasticsearch
+    elasticsearch:
+      cluster: elasticsearch
+      hosts: http://localhost:9200
+      index: zipkin
+      index-shards: 5
+      index-replicas: 1
+
+```
+
+再次启动track项目后，可以将数据持久化到elasticsearch。
 

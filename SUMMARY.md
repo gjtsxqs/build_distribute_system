@@ -19,4 +19,6 @@
 * [服务链路追踪](fu-wu-lian-lu-zhui-zong.md)
   * [sleuth](fu-wu-lian-lu-zhui-zong/sleuth.md)
   * ELK使用与安装
+* [消息总线](xiao-xi-zong-xian.md)
+* 分布式事务
 

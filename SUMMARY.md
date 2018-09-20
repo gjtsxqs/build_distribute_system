@@ -25,5 +25,5 @@
   * [分布式事务](fen-bu-shi-shi-wu/fen-bu-shi-shi-wu.md)
   * [阿里GTS](fen-bu-shi-shi-wu/a-li-gts.md)
   * LCN事务框架
-* 微服务设计
+* [分布式数据库](wei-fu-wu-she-ji.md)
 

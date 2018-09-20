@@ -9,6 +9,7 @@
 * [服务注册与发现](chapter1.md)
   * [eureka](chapter1/eureka.md)
   * dubbo
+  * consul
 * [分布式配置管理](fen-bu-shi-pei-zhi-guan-li.md)
   * disconf
   * [apollo](fen-bu-shi-pei-zhi-guan-li/apollo.md)
@@ -19,6 +20,5 @@
 * [服务链路追踪](fu-wu-lian-lu-zhui-zong.md)
   * [sleuth](fu-wu-lian-lu-zhui-zong/sleuth.md)
   * ELK使用与安装
-* [消息总线](xiao-xi-zong-xian.md)
-* 分布式事务
+* [分布式事务](fen-bu-shi-shi-wu.md)
 

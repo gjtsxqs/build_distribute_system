@@ -59,13 +59,7 @@ XA是资源层面的分布式事务，强一致性，在两阶段提交的整个
 
     1、try过程的本地事务，是保证资源预留的业务逻辑的正确性。
 
-    2、confirm/cancel执行的本地事务逻辑确认/取消预留资源，以保证最终一致性，也就是所谓的`补偿型事务`\(Compensation-Based Transactions\)。
+    2、confirm/cancel执行的本地事务逻辑确认/取消预留资源，以保证最终一致性，也就是所谓的补偿型事务\(Compensation-Based Transactions\)。
 
 由于是多个独立的本地事务，因此不会对资源一直加锁。
-
-
-
-
-
-
 

@@ -48,6 +48,49 @@ GTS与XA在全局事务的故障恢复处理与并发控制采用了不同的实
 | SLOCK | 整数 | 共享锁标记 |
 | BRANCH\_ID | 整数 | 事务分支标识 |
 
+恢复控制模块：基于GTS日志表，进行故障恢复。 日志表定义如下：
+
+| 字段名 | 字段类型 | 字段描述 |
+| :--- | :--- | :--- |
+| ID | 整数 | 自增主键 |
+| GMT\_CREATE | 时间 | 创建时间 |
+| GMT\_MODIFIED | datetime | 修改时间 |
+| XID | 整数 | 全局事务ID |
+| BRANCH\_ID | 整数 | 分支事务ID |
+| ROLLBACK\_INFO | longblob | 查询语句、前像与后像 |
+| STATUS | 整数 | 状态 |
+| SERVER | 字符串 | 分支所在DB IP |
+
+
+
+### 主要流程序列图 {#14}
+
+分别描述了insert/delete/update操作、读已提交操作、提交操作和回滚操作等四个操作的序列图（一种可能的实现方式）。
+
+#### insert/delete/update操作流程序列图 {#15}
+
+
+
+![](https://raw.githubusercontent.com/ChengXiaoZ/docs/master/media/2018-01-01-SEQ-INSERT-DEL-UPDATE.png "2018-01-01-SEQ-INSERT-DEL-UPDATE.png")
+
+#### 读已提交操作流程序列图 {#16}
+
+
+
+![](https://raw.githubusercontent.com/ChengXiaoZ/docs/master/media/2018-01-01-SEQ-READ-COMMIT.png "2018-01-01-SEQ-READ-COMMIT.png")
+
+#### 提交操作流程序列图 {#17}
+
+
+
+![](https://raw.githubusercontent.com/ChengXiaoZ/docs/master/media/2018-01-01-SEQ-COMMIT.png "2018-01-01-SEQ-COMMIT.png")
+
+#### 回滚操作流程序列图 {#18}
+
+
+
+![](https://raw.githubusercontent.com/ChengXiaoZ/docs/master/media/2018-01-01-SEQ-ROLLBACK.png "2018-01-01-SEQ-ROLLBACK.png")
+
 
 
 

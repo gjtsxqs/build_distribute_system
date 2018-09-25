@@ -8,8 +8,8 @@
   * [rest+ribbon](fu-wu-xiao-fei-zhe/rest+ribbon.md)
 * [服务注册与发现](chapter1.md)
   * [eureka](chapter1/eureka.md)
-  * dubbo
-  * consul
+  * [dubbo](chapter1/dubbo.md)
+  * [consul](chapter1/consul.md)
 * [分布式配置管理](fen-bu-shi-pei-zhi-guan-li.md)
   * disconf
   * [apollo](fen-bu-shi-pei-zhi-guan-li/apollo.md)

@@ -1,8 +1,8 @@
 ### Sharding-JDBC出身
 
-Sharding-JDBC是当当应用框架ddframe中，从关系型数据库模块dd-rdb中分离出来的数据库水平分片框架，实现透明化数据库分库分表访问。Sharding-JDBC是继dubbox和elastic-job之后，ddframe系列开源的第3个项目。 
+Sharding-JDBC是当当应用框架ddframe中，从关系型数据库模块dd-rdb中分离出来的数据库水平分片框架，实现透明化数据库分库分表访问。Sharding-JDBC是继dubbox和elastic-job之后，ddframe系列开源的第3个项目。
 
-Sharding-JDBC直接封装JDBC协议，可以理解为增强版的JDBC驱动，旧代码迁移成本几乎为零。 
+Sharding-JDBC直接封装JDBC协议，可以理解为增强版的JDBC驱动，旧代码迁移成本几乎为零。
 
 Sharding-JDBC定位为轻量级java框架，使用客户端直连数据库，以jar包形式提供服务，无proxy代理层，无需额外部署，无其他依赖，DBA也无需改变原有的运维方式。
 
@@ -14,7 +14,7 @@ Sharding-JDBC定位为轻量级java框架，使用客户端直连数据库，以
 
 Sharding-JDBC 还提供了读写分离的能力，用于减轻写库的压力。
 
-此外，Sharding-JDBC 可以用在 JPA 场景中，如 JPA、Hibernate、Mybatis，Spring JDBC Template 等任何 Java 的 ORM 框架。
+此外，Sharding-JDBC 可以用在 JPA 场景中，如 JPA、Hibernate、Mybatis，Spring JDBC Template 等任何 Java 的 ORM 框架。
 
 Java 的 ORM 框架也都是采用 JDBC 与数据库交互。这也是我们选择在 JDBC 层，而非选择一个 ORM 框架进行开发的原因。我们希望 Sharding-JDBC 可以尽量的兼容所有的 Java 数据库访问层，并且无缝的接入业务应用。
 
@@ -31,9 +31,7 @@ Java 的 ORM 框架也都是采用 JDBC 与数据库交互。这也是我们选�
 
 从设计理念上看确实有一定的相似性。主要流程都是SQL 解析 -&gt; SQL 改写 -&gt; SQL 路由 -&gt; SQL 执行 -&gt; 结果归并。但架构设计上是不同的。Mycat 是基于 Proxy，它复写了 MySQL 协议，将 Mycat Server 伪装成一个 MySQL 数据库，而 Sharding-JDBC 是基于 JDBC 接口的扩展，是以 jar 包的形式提供轻量级服务的。
 
-SQL 解析这块，现在的 Shariding-JDBC 和 Mycat 也比较相似，都是使用 Druid 作为 SQL 解析的基础类库。但 Sharding-JDBC 正在重写 SQL 解析这块，是去掉 Duird 的完全自研版本。不可否认 Druid 是一个优秀的连接池，而且 SQL 解析这块做得也很强，但它毕竟不是一个专门为了 Sharding 而做的 SQL 解析器，它的大致解析流程是 Lexer -&gt; Parser -&gt; AST -&gt; Vistor，使用者需要实现它的 Vistor 接口，将自己的业务逻辑在 Vistor 中实现，因此需要通过 Vistor 再生成 SharidingContext，而抽象语法树 AST，也需要对 SQL 完全理解。Sharding-JDBC 自研的 SQL 解析器，对于 Sharding 不相关的关键词采用跳过的方法，整体解析流程简化为 Lexer -&gt; Parser -&gt; SharidingContext，在性能以及实现复杂度上都有所突破。
-
-
+SQL 解析这块，现在的 Shariding-JDBC 和 Mycat 也比较相似，都是使用 Druid 作为 SQL 解析的基础类库。但 Sharding-JDBC 正在重写 SQL 解析这块，是去掉 Duird 的完全自研版本。不可否认 Druid 是一个优秀的连接池，而且 SQL 解析这块做得也很强，但它毕竟不是一个专门为了 Sharding 而做的 SQL 解析器，它的大致解析流程是 Lexer -&gt; Parser -&gt; AST -&gt; Vistor，使用者需要实现它的 Vistor 接口，将自己的业务逻辑在 Vistor 中实现，因此需要通过 Vistor 再生成 SharidingContext，而抽象语法树 AST，也需要对 SQL 完全理解。Sharding-JDBC 自研的 SQL 解析器，对于 Sharding 不相关的关键词采用跳过的方法，整体解析流程简化为 Lexer -&gt; Parser -&gt; SharidingContext，在性能以及实现复杂度上都有所突破。
 
 #### 分库分表使用 like 查询，是否能查询出来？性能如何？会去查询所有的库和表吗？
 
@@ -50,9 +48,72 @@ hintManager.setMasterRouteOnly();
 // 继续JDBC操作
 ```
 
-#### 
+#### SQL 语句的支持
 
-### 
+由于时间和精力有限，目前无法做到全 SQL 的兼容。我们现阶段的目标是尽量支持 OLTP 最常用的 80% 的 SQL。目前支持聚合、分组、排序等查询。**暂时不支持 distinct，对 or 的支持也不是特别完善**，但是 distinct 和 group by 可以互换，or 也可以用 in 代替。
+
+对于**过于复杂的 SQL，如子查询**等，不一定适合在大数据量的分片数据库中使用，也许需要重新梳理。
+
+目前 Sharding-JDBC **仅支持 MySQL**，对其他数据库的支持（比如 Oracle）也正在进行。现在 New SQL Parser 正在进行中。计划在这个版本发布对 Oracle、PG 以及 SQLServer 的支持。
+
+#### 对于分布式事务这块，有什么实践经验分享吗？
+
+分布式事务这块，我们认为 XA 多阶段提交的方式，虽然对分布式数据的完整性有比较好的保障，但会极大的降影响应用性能，并未考虑采用。我们采用的是两种方式，一种称之为弱 XA，另一种是柔性事务，即 BASE。
+
+弱 XA 就是分库之后的数据库各自负责自己事务的提交和回滚，没有统一的调度器集中处理。这样做的好处是天然就支持，对性能也没有影响。但一旦出问题，比如两个库的数据都需要提交，一个提交成功，另一个提交时断网导致失败，则会发生数据不一致的问题，而且这种数据不一致是永久存在的。
+
+柔性事务是对弱 XA 的有效补充。柔性事务类型很多。
+
+Sharding-JDBC 主要实现的是最大努力送达型。即认为事务经过反复尝试一定能够成功。如果每次事务执行失败，则记录至事务库，并通过异步的手段不断的尝试，直至事务成功（可以设置尝试次数，如果尝试太多仍然失败则入库并需要人工干预）。在尝试的途中，数据会有一定时间的不一致，但最终是一致的。通过这种手段可以在性能不受影响的情况下牺牲强一致性，达到数据的最终一致性。最大努力送达型事务的缺点是假定事务一定是成功的，无法回滚，因此不够灵活。
+
+还有一种柔性事务类型是 TCC，即 Try Confirm Cancel。可以通过事务管理器控制事务的提交或回滚，更加接近原生事务，但仍然是最终一致性。其缺点是需要业务代码自行实现 Try Confirm Cancel 的接口，对现有业务带来一定冲击。未来 Sharding-JDBC 会带来对 TCC 的支持。
+
+还有一些其他的分布式事务，如 Google 提出的 F1 等，由于 Shariding-JDBC 仍然使用数据库的原有存储引擎，并未改变，因此暂时不考虑对此类型事务的支持。
+
+#### 请教一下，根据主键分片，以用户名登录，如何知道用户落在哪个分片上？
+
+如果用户名是主键，则可以直接根据您定义的分片策略计算，算出该用户最终落在哪个库的哪张表上。
+
+如果用户名不是主键，则必须通过全路由查询，一个一个的找，直到找到为止。
+
+#### 有一个问题一直很疑惑，目前分库分表的中间件有两种思想，分别是：
+
+1. 类似 Sharding-JDBC 及 TDDL 的增强版 JDBC 驱动思想
+2. 类似 Mycat 增加中间层，然后在中间层进行分库分表思想
+
+我想问的是，这两种思想都有什么优势和劣势呢，大公司的主流选型又是哪种？
+
+两种方式各有优缺点。
+
+JDBC 驱动版的优点：
+
+1. 轻量，范围更加容易界定，只是 JDBC 增强，不包括 HA、事务以及数据库元数据管理
+2. 开发的工作量较小，无需关注 nio，各个数据库协议等
+3. 运维无需改动，无需关注中间件本身的 HA
+4. 性能高，JDBC 直连数据库，无需二次转发
+5. 可支持各种基于 JDBC 协议的数据库，如：MySQL，Oralce，SQLServer
+
+Proxy 版的优点：
+
+1. 可以负责更多的内容，将数据迁移，分布式事务等纳入 Proxy 的范畴
+2. 更有效的管理数据库的连接
+3. 整合大数据思路，将 OLTP 和 OLAP 分离处理
+
+因此两种方式互相可以互补，建议使用 Java 的团队，且仅 OLTP 的互联网前端操作。有可能会使用多种数据库的情况，可以选择 JDBC 层的中间件；如果需要 OLAP 和 OLTP 混合，加以重量级的操作，如数据迁移，分布式事务等，可以考虑 Proxy 层的中间件。但目前开源的数据迁移和分布式事务的完善解决方案还不常见。NewSQL 这种改变数据库引擎的方式就不在这里讨论了。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
